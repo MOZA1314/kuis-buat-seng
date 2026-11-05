@@ -3,448 +3,364 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuis: Seberapa Sopan Kamu ke Pasangan?</title>
+    <title>Kuis Kesopanan & Empati Hubungan 💬✨</title>
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts: Poppins for a friendly vibe -->
+    <!-- Google Fonts: Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Custom Styling for Glassmorphism & Animations */
         body {
             font-family: 'Poppins', sans-serif;
-            /* Romantic pastel gradient background */
             background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
             background-attachment: fixed;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-            margin: 0;
         }
 
-        /* Glassmorphism card effect */
         .glass-card {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            border-radius: 24px;
         }
 
-        /* Glass button styles */
-        .glass-btn {
-            background: rgba(255, 255, 255, 0.5);
+        .glass-input {
+            background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.8);
             transition: all 0.3s ease;
         }
 
-        .glass-btn:hover {
+        .glass-input:focus {
             background: rgba(255, 255, 255, 0.9);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .glass-btn:active {
-            transform: translateY(0);
+            outline: none;
+            border-color: #ec4899;
+            box-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
         }
 
-        /* Animations */
         .fade-in {
-            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        .slide-up {
-            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: fadeIn 0.4s ease-in-out forwards;
         }
 
         @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            0% { 
-                opacity: 0; 
-                transform: translateY(20px); 
-            }
-            100% { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
-        }
-
-        /* Floating background decorative circles */
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(40px);
-            z-index: -1;
-            opacity: 0.6;
-        }
-        .blob-1 {
-            width: 300px; height: 300px;
-            background: #ffb7b2;
-            top: -50px; left: -50px;
-            animation: float 6s ease-in-out infinite;
-        }
-        .blob-2 {
-            width: 250px; height: 250px;
-            background: #e2f0cb;
-            bottom: -50px; right: -50px;
-            animation: float 8s ease-in-out infinite reverse;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(20px); }
-        }
-
-        .hidden-screen {
-            display: none;
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="p-4 sm:p-8 text-gray-800 relative z-0">
+<body class="flex items-center justify-center p-4">
 
-    <!-- Decorative Background Elements -->
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-
-    <!-- Main Container -->
-    <main class="glass-card w-full max-w-lg p-8 mx-auto relative overflow-hidden transition-all duration-500">
+    <!-- Container Utama -->
+    <div class="w-full max-full max-w-2xl">
         
-        <!-- 1. START SCREEN -->
-        <section id="start-screen" class="flex flex-col items-center text-center fade-in">
-            <div class="text-5xl mb-4">💖</div>
-            <h1 class="text-3xl font-bold mb-3 text-gray-800 leading-tight">Seberapa Sopan Kamu ke Pasangan?</h1>
-            <p class="text-gray-600 mb-8 font-medium">
-                Komunikasi, privasi, dan kesabaran itu penting banget lho dalam hubungan. 
-                Yuk, tes apakah kamu 'Green Flag Idaman' atau malah 'Red Flag Alert!'
-            </p>
-            <button onclick="startQuiz()" class="glass-btn px-8 py-3 rounded-full font-semibold text-pink-600 w-full sm:w-auto text-lg">
-                Mulai Kuis Sekarang ✨
-            </button>
-        </section>
-
-        <!-- 2. QUIZ SCREEN -->
-        <section id="quiz-screen" class="hidden-screen flex-col">
-            <!-- Progress Bar -->
-            <div class="w-full bg-white/30 rounded-full h-2.5 mb-6">
-                <div id="progress-bar" class="bg-pink-400 h-2.5 rounded-full transition-all duration-500 ease-out" style="width: 20%"></div>
-            </div>
-            
-            <div class="flex justify-between items-center mb-6">
-                <span class="text-sm font-semibold text-pink-600 bg-white/50 px-3 py-1 rounded-full" id="question-counter">Pertanyaan 1 / 5</span>
-            </div>
-
-            <!-- Question Text -->
-            <h2 id="question-text" class="text-xl sm:text-2xl font-semibold mb-6 text-gray-800 leading-snug">
-                <!-- Question will appear here -->
-            </h2>
-
-            <!-- Options Container -->
-            <div id="options-container" class="flex flex-col space-y-3">
-                <!-- Buttons will be injected via JS -->
-            </div>
-        </section>
-
-        <!-- 3. RESULT SCREEN -->
-        <section id="result-screen" class="hidden-screen flex-col items-center text-center">
-            <div id="result-icon" class="text-6xl mb-4 slide-up" style="animation-delay: 0.1s;"></div>
-            <h1 id="result-title" class="text-3xl font-bold mb-2 text-gray-800 slide-up" style="animation-delay: 0.2s;">
-                <!-- Result Title -->
+        <!-- HEADER / BANNER -->
+        <div class="glass-card rounded-3xl p-6 mb-6 text-center">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center justify-center gap-2">
+                <span>💌</span> Deep Talk & Empati
             </h1>
-            <h3 class="text-lg font-semibold text-pink-600 mb-4 slide-up" style="animation-delay: 0.3s;">
-                Skor Kamu: <span id="final-score">0</span>/60
-            </h3>
-            <p id="result-desc" class="text-gray-600 mb-8 font-medium px-2 slide-up" style="animation-delay: 0.4s;">
-                <!-- Result Description -->
-            </p>
-            <button onclick="restartQuiz()" class="glass-btn px-8 py-3 rounded-full font-semibold text-pink-600 w-full sm:w-auto text-lg slide-up" style="animation-delay: 0.5s;">
-                Main Lagi 🔄
+            <p class="text-gray-600 text-sm mt-1">10 Pertanyaan Random! Jawab dari hati ya, sayang~ ✨</p>
+        </div>
+
+        <!-- SCREEN 1: START / INPUT NAMA -->
+        <div id="startScreen" class="glass-card rounded-3xl p-8 fade-in text-center">
+            <div class="text-5xl mb-4">✨🌸</div>
+            <h2 class="text-xl font-semibold text-gray-800 mb-2">Sebelum Mulai...</h2>
+            <p class="text-sm text-gray-600 mb-6">Tulis nama atau panggilan kesayanganmu di bawah ini ya!</p>
+            
+            <input type="text" id="userName" placeholder="Nama / Panggilan kamu..." 
+                   class="glass-input w-full p-4 rounded-2xl text-gray-800 text-center text-lg font-medium mb-6">
+            
+            <button onclick="startQuiz()" 
+                    class="w-full bg-gradient-to-r from-pink-500 to-rose-400 text-white font-semibold py-4 rounded-2xl shadow-lg hover:opacity-90 transition transform hover:-translate-y-0.5">
+                Mulai Jawab Kuis 💕
             </button>
-        </section>
+        </div>
 
-    </main>
+        <!-- SCREEN 2: QUIZ ESSAY -->
+        <div id="quizScreen" class="glass-card rounded-3xl p-6 md:p-8 fade-in hidden">
+            <!-- Progress Bar & Indicator -->
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span id="questionCounter" class="text-xs md:text-sm font-semibold text-pink-700 bg-pink-100/70 px-3 py-1 rounded-full">
+                        Pertanyaan 1 dari 10
+                    </span>
+                    <span id="savedStatus" class="text-xs text-gray-500 italic">✨ Auto-saved</span>
+                </div>
+                <div class="w-full bg-white/50 h-2.5 rounded-full overflow-hidden">
+                    <div id="progressBar" class="bg-gradient-to-r from-pink-500 to-rose-400 h-full transition-all duration-300 w-0"></div>
+                </div>
+            </div>
 
+            <!-- Question Box -->
+            <div class="mb-6">
+                <h3 id="questionText" class="text-base md:text-lg font-semibold text-gray-800 leading-relaxed mb-4">
+                    <!-- Teks Pertanyaan Muncul di Sini -->
+                </h3>
+                
+                <textarea id="essayAnswer" rows="5" 
+                          placeholder="Tulis jawaban lengkapmu di sini..." 
+                          class="glass-input w-full p-4 rounded-2xl text-gray-800 text-sm md:text-base leading-relaxed resize-none"></textarea>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex gap-4">
+                <button id="btnPrev" onclick="prevQuestion()" 
+                        class="w-1/3 bg-white/70 hover:bg-white text-gray-700 font-semibold py-3.5 rounded-2xl border border-white transition disabled:opacity-40">
+                    ⬅️ Kembali
+                </button>
+                <button id="btnNext" onclick="nextQuestion()" 
+                        class="w-2/3 bg-gradient-to-r from-pink-500 to-rose-400 text-white font-semibold py-3.5 rounded-2xl shadow-md hover:opacity-90 transition">
+                    Lanjut ➡️
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: RESULT / SUMMARY -->
+        <div id="resultScreen" class="glass-card rounded-3xl p-6 md:p-8 fade-in hidden">
+            <div class="text-center mb-6">
+                <div class="text-5xl mb-2">🎉💖</div>
+                <h2 class="text-2xl font-bold text-gray-800">Selesai! Terima Kasih Ya!</h2>
+                <p class="text-sm text-gray-600 mt-1">Semua jawabanmu udah tersimpan rapi.</p>
+            </div>
+
+            <!-- Summary List -->
+            <div id="summaryList" class="max-h-72 overflow-y-auto pr-2 space-y-4 mb-6 text-sm text-gray-800">
+                <!-- Rangkuman Jawaban Muncul di Sini -->
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="space-y-3">
+                <button onclick="sendToWhatsApp()" 
+                        class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-4 rounded-2xl shadow-lg flex items-center justify-center gap-2 transition">
+                    <span>💬</span> Kirim Jawaban ke WhatsApp
+                </button>
+                <button onclick="resetQuiz()" 
+                        class="w-full bg-white/60 hover:bg-white text-gray-600 font-medium py-3 rounded-2xl transition">
+                    🔄 Acak Ulang 10 Pertanyaan Baru
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Logic -->
     <script>
-        // Quiz Data
-        const questions = [
-            {
-                question: "Pasanganmu lagi cerita panjang lebar tentang hari yang buruk di kampus, tapi kamu lagi asyik main game. Apa yang kamu lakuin?",
-                options: [
-                    { text: "Pause game/minta waktu sebentar lalu dengerin.", points: 3 },
-                    { text: "Tetap main sambil sesekali ngangguk.", points: 2 },
-                    { text: "Minta dia diam dulu/cerita nanti karena fokus push rank.", points: 1 }
-                ]
-            },
-            {
-                question: "Kalian janjian ketemu jam 4 sore, tapi kamu tiba-tiba ada urusan mendadak dan bakal telat.",
-                options: [
-                    { text: "Langsung chat/telepon minta maaf & kasih estimasi waktu.", points: 3 },
-                    { text: "Ngabarin pas udah dekat jam 4/pas dia nanya.", points: 2 },
-                    { text: "Nggak ngabarin, toh nanti juga sampai.", points: 1 }
-                ]
-            },
-            {
-                question: "Pasanganmu masak/bawain makanan buat kamu, tapi rasanya keasinan.",
-                options: [
-                    { text: "Ucapin makasih, makan sebisanya, nanti pelan-pelan kasih saran.", points: 3 },
-                    { text: "Makan dikit aja terus jujur bilang kurang pas.", points: 2 },
-                    { text: "Nyeletuk, 'Wah keasinan banget, nggak bisa dimakan.'", points: 1 }
-                ]
-            },
-            {
-                question: "Waktu lagi jalan bareng, pasanganmu mau pinjam HP-mu sebentar.",
-                options: [
-                    { text: "Langsung kasihin aja.", points: 3 },
-                    { text: "Kasih dengan ragu/nanya 'Mau buka apa?'.", points: 2 },
-                    { text: "Nolak/buru-buru nutup aplikasi dulu.", points: 1 }
-                ]
-            },
-            {
-                question: "Pasanganmu potong rambut gaya baru, tapi menurutmu kurang cocok.",
-                options: [
-                    { text: "Puji keberaniannya & bilang tetap menarik.", points: 3 },
-                    { text: "Jawab jujur lebih suka gaya lama.", points: 2 },
-                    { text: "Ngetawain/bilang aneh.", points: 1 }
-                ]
-            },
-            {
-                question: "Kalian beda pendapat dan suasana panas, pasanganmu mau nangis.",
-                options: [
-                    { text: "Turunin nada suara, tahan ego, ajak ngobrol baik-baik.", points: 3 },
-                    { text: "Diam aja nunggu dia tenang.", points: 2 },
-                    { text: "Ikutan emosi/bilang 'Gitu aja lebay.'", points: 1 }
-                ]
-            },
-            {
-                question: "Pasanganmu kumpul sama temannya, kamu kangen/bosan.",
-                options: [
-                    { text: "Ngertiin & biarin dia have fun, titip pesan aja.", points: 3 },
-                    { text: "Spam chat nanyain ngapain aja.", points: 2 },
-                    { text: "Marah & nuduh dia nyuekin.", points: 1 }
-                ]
-            },
-            {
-                question: "Pasanganmu ngingetin janji kecil yang beneran kamu lupa.",
-                options: [
-                    { text: "Minta maaf tulus, ngaku salah, segera tepatin.", points: 3 },
-                    { text: "Ngeles biar nggak kelihatan lupa.", points: 2 },
-                    { text: "Balik nyalahin karena nggak ngingetin dari awal.", points: 1 }
-                ]
-            },
-            {
-                question: "Di tempat umum, pasanganmu kesandung/ngelakuin hal memalukan.",
-                options: [
-                    { text: "Bantuin/ikutan ketawa kecil biar nggak malu sendiri.", points: 3 },
-                    { text: "Pura-pura nggak kenal/buang muka.", points: 2 },
-                    { text: "Marahin di tempat umum.", points: 1 }
-                ]
-            },
-            {
-                question: "Pasanganmu antusias cerita hobinya yang kamu nggak suka.",
-                options: [
-                    { text: "Tetap dengerin & nanya biar dia semangat.", points: 3 },
-                    { text: "Dengerin seadanya sambil main HP.", points: 2 },
-                    { text: "Motong & suruh ganti topik.", points: 1 }
-                ]
-            },
-            {
-                question: "Kamu capek banget habis nugas/bikin proyek mikrokontroler, pasangan ngajak jalan.",
-                options: [
-                    { text: "Jelasin baik-baik capek, tawarin ganti besok/VC.", points: 3 },
-                    { text: "Nolak singkat 'Nggak bisa, capek'.", points: 2 },
-                    { text: "Ngambek karena ngerasa dia nggak ngertiin.", points: 1 }
-                ]
-            },
-            {
-                question: "Pasangan nanya pendapat soal barang overprice yang mau dibeli pakai uangnya sendiri.",
-                options: [
-                    { text: "Kasih saran logis, tapi dukung keputusannya.", points: 3 },
-                    { text: "Bilang 'Terserah kamu aja'.", points: 2 },
-                    { text: "Ngomel & ngelarang keras.", points: 1 }
-                ]
-            },
-            {
-                question: "Teman lawan jenis sering chat nggak penting ke kamu.",
-                options: [
-                    { text: "Balas seperlunya, terbuka sama pasangan biar nggak overthinking.", points: 3 },
-                    { text: "Asyik chatan tapi di-silent.", points: 2 },
-                    { text: "Hapus riwayat chat biar aman.", points: 1 }
-                ]
-            },
-            {
-                question: "Nonton film berdua pilihan dia, tapi kamu ngantuk/bosan.",
-                options: [
-                    { text: "Jujur ngantuk, minta maaf, nyender di bahunya.", points: 3 },
-                    { text: "Main HP sendiri biar nggak ketiduran.", points: 2 },
-                    { text: "Ninggalin tidur/komplain film jelek.", points: 1 }
-                ]
-            },
-            {
-                question: "Pasangan numpahin minuman ke bajumu tanpa sengaja.",
-                options: [
-                    { text: "Bilang 'Nggak apa-apa' & bersihin bareng.", points: 3 },
-                    { text: "Ngeluh sedikit sambil bersihin sendiri.", points: 2 },
-                    { text: "Nge-gas & ngatain ceroboh.", points: 1 }
-                ]
-            },
-            {
-                question: "Pasangan ngajak makan di tempat yang kamu nggak pengen.",
-                options: [
-                    { text: "Usulin tempat lain dengan enak.", points: 3 },
-                    { text: "Pasrah ikut tapi muka ditekuk.", points: 2 },
-                    { text: "Tolak mentah-mentah.", points: 1 }
-                ]
-            },
-            {
-                question: "Teman tongkronganmu bercandain pasanganmu sampai dia nggak nyaman.",
-                options: [
-                    { text: "Back-up pasangan/negur teman dengan asyik tapi tegas.", points: 3 },
-                    { text: "Ikutan senyum aja biar nggak kaku.", points: 2 },
-                    { text: "Ikutan ngetawain pasangan.", points: 1 }
-                ]
-            },
-            {
-                question: "Pasangan ngirim meme/TikTok garing.",
-                options: [
-                    { text: "Bales stiker lucu/wkwkwk ngehargain usahanya.", points: 3 },
-                    { text: "Cuma di-read/balas 'Garing'.", points: 2 },
-                    { text: "Bilang 'Nggak lucu, ngapain ngirim'.", points: 1 }
-                ]
-            },
-            {
-                question: "Waktu marahan, dia bilang 'Aku butuh waktu sendiri dulu'.",
-                options: [
-                    { text: "Kasih space & bilang 'Oke kabarin ya'.", points: 3 },
-                    { text: "Setuju tapi nada sinis/passive-aggressive.", points: 2 },
-                    { text: "Maksa ngobrol detik itu juga.", points: 1 }
-                ]
-            },
-            {
-                question: "Pasangan sakit & nggak bisa nemenin ke acara penting kalian.",
-                options: [
-                    { text: "Gak masalahin acaranya, fokus nanyain keadaannya.", points: 3 },
-                    { text: "Kecewa bilang 'Yaaah' tapi nyuruh istirahat.", points: 2 },
-                    { text: "Ngambek karena rencana berantakan.", points: 1 }
-                ]
-            }
+        // Kumpulan 50 Pertanyaan Random
+        const allQuestionsPool = [
+            "Pasanganmu lagi cerita panjang lebar tentang hari yang buruk, tapi kamu lagi asyik main game/nonton. Apa yang biasanya kamu lakukan?",
+            "Kalau kita janjian ketemu jam 4 sore tapi kamu ada urusan mendadak dan bakal telat, gimana caramu ngabarin dan menyikapinya?",
+            "Pasanganmu masak atau bawain makanan buat kamu tapi rasanya kurang cocok di lidahmu. Gimana reaksimu?",
+            "Kalau pasanganmu mau pinjam HP kamu sebentar buat cek sesuatu karena baterainya habis, apa yang kamu rasakan dan lakukan?",
+            "Pasanganmu potong rambut dengan gaya baru tapi kamu kurang suka. Pas dia nanya pendapatmu, kamu bakal jawab apa?",
+            "Kalau kita lagi beda pendapat dan suasananya mulai panas/emosi, gimana caramu meredakan suasana?",
+            "Pasanganmu lagi kumpul sama teman-temannya dan respon chat-nya agak lama. Gimana perasaan dan tindakanmu?",
+            "Kalau kamu tanpa sengaja lupa janji kecil yang udah kita bikin, gimana caramu minta maaf dan memperbaikinya?",
+            "Waktu lagi di tempat umum dan pasanganmu nggak sengaja ngelakuin hal memalukan (misal kesandung), apa reaksi pertamamu?",
+            "Saat pasanganmu cerita antusias soal hobinya yang jujur kamu kurang paham, gimana cara kamu mendengarkannya?",
+            "Kalau kamu lagi capek banget habis nugas/kerja terus pasanganmu ngajak jalan, gimana caramu menolak atau memberi pengertian?",
+            "Bagaimana pendapatmu kalau pasanganmu mau beli barang pakai uangnya sendiri tapi menurutmu harganya kemahalan?",
+            "Gimana batas yang kamu tetapkan kalau ada teman lawan jenis yang sering chat kamu buat hal-hal di luar urusan penting?",
+            "Kalau kita lagi nonton film pilihan pasanganmu tapi kamu ngerasa ngantuk/bosan banget, kamu bakal bilang apa?",
+            "Pasanganmu nggak sengaja numpahin minuman ke pakaian/barang kesayanganmu. Gimana respon spontanmu?",
+            "Kalau pasanganmu ngajak makan di tempat yang kamu lagi nggak pengen banget, gimana caramu mengusulkan alternatif?",
+            "Kalau di tempat tongkrongan ada temanmu yang bikin lelucon yang bikin pasanganmu nggak nyaman, apa yang bakal kamu lakukan?",
+            "Gimana reaksimu kalau pasanganmu ngirim meme/video/TikTok yang menurutmu garing atau nggak lucu?",
+            "Kalau pasanganmu bilang 'Aku butuh waktu sendiri (space) dulu ya', gimana kamu meresponsnya?",
+            "Kalau pasanganmu sakit tapi di saat yang sama kamu ada jadwal kumpul sama temen-temen yang udah direncanain lama, kamu milih yang mana?",
+            "Mantan tiba-tiba nge-chat nanyain kabar atau hal basa-basi. Apa yang bakal kamu lakuin?",
+            "Pasanganmu ngasih kado yang jujur aja kamu nggak butuh atau nggak suka. Apa reaksimu saat menerimanya?",
+            "Kamu ketahuan berbohong untuk hal sepele (white lie) biar pasangan nggak marah. Waktu ketahuan, apa yang bakal kamu jelaskan?",
+            "Gimana responmu kalau pasangan tiba-tiba cemburu buta tanpa alasan yang jelas?",
+            "Kalian lagi di jalan kehujanan atau kepanasan banget padahal baru dandan rapi. Gimana caramu menjaga mood kalian berdua?",
+            "Keuanganmu lagi mepet banget bulan ini, tapi pasanganmu pengen banget diajak makan di tempat yang lumayan mahal. Kamu bakal bilang apa?",
+            "Kalau pasanganmu lagi insecure dan ngeluh soal berat badan atau bentuk fisiknya, kalimat apa yang bakal kamu ucapin buat nenangin dia?",
+            "Kamu nggak sengaja kelupaan tanggal penting (misal anniversary atau ulang tahun). Apa yang kamu lakukan buat menebus kesalahan itu?",
+            "Pasangan minta diajarin sesuatu (misal pelajaran atau main game) tapi dia agak lambat pahamnya. Gimana caramu bersabar?",
+            "Gimana reaksimu kalau ternyata keluarga pasangan terlihat kurang welcome atau dingin ke kamu saat pertama ketemu?",
+            "Kamu nemuin barang milik pasangan yang tertinggal di rumahmu/tasmu. Apa yang bakal kamu lakuin?",
+            "Pasangan tiba-tiba nangis di depanmu tanpa ngasih tahu alasannya. Apa tindakan pertamamu?",
+            "Waktu berantem, pasangan milih diam seribu bahasa (silent treatment). Gimana caramu menghadapi situasi ini?",
+            "Pasangan nggak sengaja merusak barang koleksi atau barang kesayanganmu. Gimana caramu mengatur emosi saat itu?",
+            "Kamu tahu kalau salah satu teman dekatmu menjelek-jelekkan pasanganmu di belakangnya. Apa yang bakal kamu lakukan?",
+            "Kalau pasangan membanding-bandingkan hubungan kalian dengan hubungan orang lain di sosmed, apa yang bakal kamu katakan kepadanya?",
+            "Kamu lagi overthinking dan butuh dukungan moral, tapi pasanganmu lagi sibuk banget sama urusannya. Apa yang kamu rasakan dan lakukan?",
+            "Kalian lagi di jalan jauh bareng, tapi selera musik kalian beda parah. Gimana cara kalian kompromi soal playlist?",
+            "Gimana pendapatmu kalau pasangan meminta akses password sosial media kamu?",
+            "Pasanganmu sering banget telat tiap kali janjian ketemu. Gimana caramu menegurnya pelan-pelan tanpa bikin berantem?",
+            "Kalian lagi jalan-jalan liburan berdua tapi malah nyasar dan bingung jalan. Reaksimu bakal panik nyalahin keadaan atau gimana?",
+            "Pasanganmu upload foto kalian berdua, tapi menurutmu muka kamu kelihatan jelek/nggak banget di foto itu. Kamu bakal minta hapus atau biarin aja?",
+            "Pasanganmu menceritakan rahasia besar tentang temannya ke kamu. Apakah kamu bisa menjaga rahasia itu atau malah ikut ceritain ke temanmu yang lain?",
+            "Kalau kamu ngerasa akhir-akhir ini pasanganmu kurang ngasih perhatian, gimana caramu menyampaikannya tanpa terdengar menuntut?",
+            "Pasangan minta ditemenin keliling mall/belanja berjam-jam padahal kamu lagi capek banget. Gimana reaksimu?",
+            "Gimana caramu menyikapi perbedaan pendapat kalau yang satu lebih suka hemat, dan yang satu agak boros/suka jajan?",
+            "Kalau pasangan nggak sengaja membaca chat pribadi kamu sama sahabatmu dan dia salah paham, gimana caramu menjelaskannya?",
+            "Pasangan menuntut kamu buat mengubah gaya berpakaian atau kebiasaanmu. Apa kamu akan menuruti atau mempertahankan jati dirimu?",
+            "Apa definisi 'Cinta yang Sehat' menurut kamu untuk saat ini?",
+            "Tuliskan pesan manis, harapan jujur, atau apresiasi kamu untuk hubungan kita ke depannya! 💕"
         ];
 
-        // State Variables
-        let currentQuestionIndex = 0;
-        let totalScore = 0;
+        let selectedQuestions = [];
+        let currentQuestion = 0;
+        let answers = [];
+        let userName = localStorage.getItem('quiz_user_name') || '';
 
-        // DOM Elements
-        const startScreen = document.getElementById('start-screen');
-        const quizScreen = document.getElementById('quiz-screen');
-        const resultScreen = document.getElementById('result-screen');
-        const questionText = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options-container');
-        const progressBar = document.getElementById('progress-bar');
-        const questionCounter = document.getElementById('question-counter');
+        // Fungsi mengacak array (Fisher-Yates Shuffle)
+        function shuffleArray(array) {
+            let shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
 
-        // Functions
+        // Auto Save Listener
+        document.getElementById('essayAnswer').addEventListener('input', function(e) {
+            answers[currentQuestion] = e.target.value;
+            localStorage.setItem('quiz_essay_answers', JSON.stringify(answers));
+        });
+
+        function initQuizData() {
+            // Cek apakah ada sesi kuis yang tersimpan
+            let savedQuestions = localStorage.getItem('quiz_selected_questions');
+            let savedAnswers = localStorage.getItem('quiz_essay_answers');
+
+            if (savedQuestions && savedAnswers) {
+                // Lanjutkan sesi sebelumnya
+                selectedQuestions = JSON.parse(savedQuestions);
+                answers = JSON.parse(savedAnswers);
+            } else {
+                // Buat 10 soal random baru jika tidak ada sesi tersimpan
+                let shuffled = shuffleArray(allQuestionsPool);
+                selectedQuestions = shuffled.slice(0, 10);
+                answers = new Array(10).fill('');
+                
+                // Simpan soal terpilih ke lokal agar aman dari refresh
+                localStorage.setItem('quiz_selected_questions', JSON.stringify(selectedQuestions));
+                localStorage.setItem('quiz_essay_answers', JSON.stringify(answers));
+            }
+        }
+
         function startQuiz() {
-            startScreen.classList.add('hidden-screen');
-            quizScreen.classList.remove('hidden-screen');
-            quizScreen.classList.add('fade-in');
-            currentQuestionIndex = 0;
-            totalScore = 0;
+            const inputName = document.getElementById('userName').value.trim();
+            if (!inputName) {
+                alert('Isi nama atau panggilan kamu dulu ya! 😊');
+                return;
+            }
+            userName = inputName;
+            localStorage.setItem('quiz_user_name', userName);
+
+            initQuizData(); // Load atau buat soal random
+            
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
             loadQuestion();
         }
 
         function loadQuestion() {
-            // Remove animation class briefly to restart it
-            quizScreen.classList.remove('fade-in');
-            void quizScreen.offsetWidth; // Trigger reflow to restart animation
-            quizScreen.classList.add('fade-in');
-
-            const currentQuestion = questions[currentQuestionIndex];
+            document.getElementById('questionCounter').innerText = `Pertanyaan ${currentQuestion + 1} dari 10`;
             
-            // Update UI
-            questionText.innerText = currentQuestion.question;
-            questionCounter.innerText = `Pertanyaan ${currentQuestionIndex + 1} / ${questions.length}`;
+            // Tambahkan nomor soal secara dinamis ke teks pertanyaan
+            document.getElementById('questionText').innerText = `${currentQuestion + 1}. ${selectedQuestions[currentQuestion]}`;
             
-            // Update Progress Bar (20% per question)
-            const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
-            progressBar.style.width = `${progressPercentage}%`;
+            document.getElementById('essayAnswer').value = answers[currentQuestion] || '';
 
-            // Clear previous options
-            optionsContainer.innerHTML = '';
+            // Update Progress Bar
+            const progress = ((currentQuestion + 1) / 10) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
 
-            // Randomize options so the highest point isn't always in the same place
-            const shuffledOptions = [...currentQuestion.options].sort(() => Math.random() - 0.5);
+            // Update Buttons
+            document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+            
+            const btnNext = document.getElementById('btnNext');
+            if (currentQuestion === 9) { // Pertanyaan ke-10 (index 9)
+                btnNext.innerText = 'Selesai & Lihat Hasil ✨';
+            } else {
+                btnNext.innerText = 'Lanjut ➡️';
+            }
+        }
 
-            // Create option buttons
-            shuffledOptions.forEach((option, index) => {
-                const btn = document.createElement('button');
-                btn.className = 'glass-btn w-full text-left p-4 rounded-xl text-gray-700 font-medium hover:text-pink-600';
-                btn.innerText = option.text;
-                // Stagger animation for options
-                btn.style.animation = `slideUp 0.4s ease forwards ${index * 0.1}s`;
-                btn.style.opacity = '0';
-                
-                btn.onclick = () => handleAnswer(option.points);
-                optionsContainer.appendChild(btn);
+        function nextQuestion() {
+            // Save current answer
+            answers[currentQuestion] = document.getElementById('essayAnswer').value;
+            localStorage.setItem('quiz_essay_answers', JSON.stringify(answers));
+
+            if (currentQuestion < 9) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                answers[currentQuestion] = document.getElementById('essayAnswer').value;
+                localStorage.setItem('quiz_essay_answers', JSON.stringify(answers));
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.remove('hidden');
+
+            const summaryList = document.getElementById('summaryList');
+            summaryList.innerHTML = '';
+
+            selectedQuestions.forEach((q, idx) => {
+                const item = document.createElement('div');
+                item.className = 'p-4 rounded-2xl bg-white/40 border border-white/60';
+                item.innerHTML = `
+                    <p class="font-medium text-gray-900 text-xs md:text-sm mb-1">${idx + 1}. ${q}</p>
+                    <p class="text-pink-900 bg-pink-50/70 p-3 rounded-xl border border-pink-100 italic text-xs md:text-sm">
+                        "${answers[idx] || 'Tidak diisi'}"
+                    </p>
+                `;
+                summaryList.appendChild(item);
             });
         }
 
-        function handleAnswer(points) {
-            totalScore += points;
-            
-            if (currentQuestionIndex < questions.length - 1) {
-                currentQuestionIndex++;
-                loadQuestion();
-            } else {
-                showResult();
+        function sendToWhatsApp() {
+            let message = `*Hasil Kuis Deep Talk & Empati* 💌\n`;
+            message += `*Nama:* ${userName}\n`;
+            message += `----------------------------------------\n\n`;
+
+            selectedQuestions.forEach((q, idx) => {
+                message += `*${idx + 1}. ${q}*\n`;
+                message += `👉 _Jawaban:_ ${answers[idx] || '(Tidak diisi)'}\n\n`;
+            });
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://api.whatsapp.com/send?text=${encodedMessage}`, '_blank');
+        }
+
+        function resetQuiz() {
+            if (confirm('Yakin mau acak ulang? Semua jawaban saat ini akan terhapus dan 10 pertanyaan baru akan muncul.')) {
+                // Hapus data tersimpan
+                localStorage.removeItem('quiz_selected_questions');
+                localStorage.removeItem('quiz_essay_answers');
+                
+                // Reset state lokal
+                answers = [];
+                selectedQuestions = [];
+                currentQuestion = 0;
+                
+                // Kembali ke halaman 1
+                document.getElementById('resultScreen').classList.add('hidden');
+                document.getElementById('startScreen').classList.remove('hidden');
             }
         }
 
-        function showResult() {
-            quizScreen.classList.add('hidden-screen');
-            resultScreen.classList.remove('hidden-screen');
-            resultScreen.classList.add('fade-in');
-
-            document.getElementById('final-score').innerText = totalScore;
-
-            const iconEl = document.getElementById('result-icon');
-            const titleEl = document.getElementById('result-title');
-            const descEl = document.getElementById('result-desc');
-
-            // Result Logic
-            if (totalScore >= 50) {
-                iconEl.innerText = "🟢✨";
-                titleEl.innerText = "Green Flag Idaman!";
-                titleEl.className = "text-3xl font-bold mb-2 text-green-600 slide-up";
-                descEl.innerText = "Wah, kamu luar biasa! Kamu sangat menghargai pasanganmu, tahu batasan privasi, dan punya komunikasi yang sehat. Pasanganmu beruntung banget punya kamu!";
-            } else if (totalScore >= 35) {
-                iconEl.innerText = "🟡😅";
-                titleEl.innerText = "Masih Suka Keceplosan";
-                titleEl.className = "text-3xl font-bold mb-2 text-yellow-600 slide-up";
-                descEl.innerText = "Kamu lumayan sopan, tapi kadang egomu atau rasa ingin tahumu masih suka nyelip. Kurang-kurangin ya overthinkingnya, lebih banyakin komunikasi jujur!";
-            } else {
-                iconEl.innerText = "🚩🚨";
-                titleEl.innerText = "Red Flag Alert!";
-                titleEl.className = "text-3xl font-bold mb-2 text-red-500 slide-up";
-                descEl.innerText = "Waduh... Kamu harus banyak introspeksi nih. Hubungan butuh rasa saling menghargai dan privasi. Yuk mulai belajar turunin ego demi hubungan yang lebih sehat.";
+        // Auto restore if already filled
+        window.onload = function() {
+            if (userName) {
+                document.getElementById('userName').value = userName;
             }
-        }
-
-        function restartQuiz() {
-            resultScreen.classList.add('hidden-screen');
-            startScreen.classList.remove('hidden-screen');
-            
-            // Remove classes for fresh animation next time
-            resultScreen.classList.remove('fade-in');
-            startScreen.classList.add('fade-in');
-        }
+        };
     </script>
 </body>
 </html>
