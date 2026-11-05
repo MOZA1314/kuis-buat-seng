@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis: Seberapa Sopan Kamu ke Pasangan?</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins for a friendly vibe -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom Styling for Glassmorphism & Animations */
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Romantic pastel gradient background */
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        /* Glassmorphism card effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            border-radius: 24px;
+        }
+
+        /* Glass button styles */
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            0% { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        /* Floating background decorative circles */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+        .blob-1 {
+            width: 300px; height: 300px;
+            background: #ffb7b2;
+            top: -50px; left: -50px;
+            animation: float 6s ease-in-out infinite;
+        }
+        .blob-2 {
+            width: 250px; height: 250px;
+            background: #e2f0cb;
+            bottom: -50px; right: -50px;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(20px); }
+        }
+
+        .hidden-screen {
+            display: none;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8 text-gray-800 relative z-0">
+
+    <!-- Decorative Background Elements -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <!-- Main Container -->
+    <main class="glass-card w-full max-w-lg p-8 mx-auto relative overflow-hidden transition-all duration-500">
+        
+        <!-- 1. START SCREEN -->
+        <section id="start-screen" class="flex flex-col items-center text-center fade-in">
+            <div class="text-5xl mb-4">💖</div>
+            <h1 class="text-3xl font-bold mb-3 text-gray-800 leading-tight">Seberapa Sopan Kamu ke Pasangan?</h1>
+            <p class="text-gray-600 mb-8 font-medium">
+                Komunikasi, privasi, dan kesabaran itu penting banget lho dalam hubungan. 
+                Yuk, tes apakah kamu 'Green Flag Idaman' atau malah 'Red Flag Alert!'
+            </p>
+            <button onclick="startQuiz()" class="glass-btn px-8 py-3 rounded-full font-semibold text-pink-600 w-full sm:w-auto text-lg">
+                Mulai Kuis Sekarang ✨
+            </button>
+        </section>
+
+        <!-- 2. QUIZ SCREEN -->
+        <section id="quiz-screen" class="hidden-screen flex-col">
+            <!-- Progress Bar -->
+            <div class="w-full bg-white/30 rounded-full h-2.5 mb-6">
+                <div id="progress-bar" class="bg-pink-400 h-2.5 rounded-full transition-all duration-500 ease-out" style="width: 20%"></div>
+            </div>
+            
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-sm font-semibold text-pink-600 bg-white/50 px-3 py-1 rounded-full" id="question-counter">Pertanyaan 1 / 5</span>
+            </div>
+
+            <!-- Question Text -->
+            <h2 id="question-text" class="text-xl sm:text-2xl font-semibold mb-6 text-gray-800 leading-snug">
+                <!-- Question will appear here -->
+            </h2>
+
+            <!-- Options Container -->
+            <div id="options-container" class="flex flex-col space-y-3">
+                <!-- Buttons will be injected via JS -->
+            </div>
+        </section>
+
+        <!-- 3. RESULT SCREEN -->
+        <section id="result-screen" class="hidden-screen flex-col items-center text-center">
+            <div id="result-icon" class="text-6xl mb-4 slide-up" style="animation-delay: 0.1s;"></div>
+            <h1 id="result-title" class="text-3xl font-bold mb-2 text-gray-800 slide-up" style="animation-delay: 0.2s;">
+                <!-- Result Title -->
+            </h1>
+            <h3 class="text-lg font-semibold text-pink-600 mb-4 slide-up" style="animation-delay: 0.3s;">
+                Skor Kamu: <span id="final-score">0</span>/60
+            </h3>
+            <p id="result-desc" class="text-gray-600 mb-8 font-medium px-2 slide-up" style="animation-delay: 0.4s;">
+                <!-- Result Description -->
+            </p>
+            <button onclick="restartQuiz()" class="glass-btn px-8 py-3 rounded-full font-semibold text-pink-600 w-full sm:w-auto text-lg slide-up" style="animation-delay: 0.5s;">
+                Main Lagi 🔄
+            </button>
+        </section>
+
+    </main>
+
+    <script>
+        // Quiz Data
+        const questions = [
+            {
+                question: "Pasanganmu lagi cerita panjang lebar tentang hari yang buruk di kampus, tapi kamu lagi asyik main game. Apa yang kamu lakuin?",
+                options: [
+                    { text: "Pause game/minta waktu sebentar lalu dengerin.", points: 3 },
+                    { text: "Tetap main sambil sesekali ngangguk.", points: 2 },
+                    { text: "Minta dia diam dulu/cerita nanti karena fokus push rank.", points: 1 }
+                ]
+            },
+            {
+                question: "Kalian janjian ketemu jam 4 sore, tapi kamu tiba-tiba ada urusan mendadak dan bakal telat.",
+                options: [
+                    { text: "Langsung chat/telepon minta maaf & kasih estimasi waktu.", points: 3 },
+                    { text: "Ngabarin pas udah dekat jam 4/pas dia nanya.", points: 2 },
+                    { text: "Nggak ngabarin, toh nanti juga sampai.", points: 1 }
+                ]
+            },
+            {
+                question: "Pasanganmu masak/bawain makanan buat kamu, tapi rasanya keasinan.",
+                options: [
+                    { text: "Ucapin makasih, makan sebisanya, nanti pelan-pelan kasih saran.", points: 3 },
+                    { text: "Makan dikit aja terus jujur bilang kurang pas.", points: 2 },
+                    { text: "Nyeletuk, 'Wah keasinan banget, nggak bisa dimakan.'", points: 1 }
+                ]
+            },
+            {
+                question: "Waktu lagi jalan bareng, pasanganmu mau pinjam HP-mu sebentar.",
+                options: [
+                    { text: "Langsung kasihin aja.", points: 3 },
+                    { text: "Kasih dengan ragu/nanya 'Mau buka apa?'.", points: 2 },
+                    { text: "Nolak/buru-buru nutup aplikasi dulu.", points: 1 }
+                ]
+            },
+            {
+                question: "Pasanganmu potong rambut gaya baru, tapi menurutmu kurang cocok.",
+                options: [
+                    { text: "Puji keberaniannya & bilang tetap menarik.", points: 3 },
+                    { text: "Jawab jujur lebih suka gaya lama.", points: 2 },
+                    { text: "Ngetawain/bilang aneh.", points: 1 }
+                ]
+            },
+            {
+                question: "Kalian beda pendapat dan suasana panas, pasanganmu mau nangis.",
+                options: [
+                    { text: "Turunin nada suara, tahan ego, ajak ngobrol baik-baik.", points: 3 },
+                    { text: "Diam aja nunggu dia tenang.", points: 2 },
+                    { text: "Ikutan emosi/bilang 'Gitu aja lebay.'", points: 1 }
+                ]
+            },
+            {
+                question: "Pasanganmu kumpul sama temannya, kamu kangen/bosan.",
+                options: [
+                    { text: "Ngertiin & biarin dia have fun, titip pesan aja.", points: 3 },
+                    { text: "Spam chat nanyain ngapain aja.", points: 2 },
+                    { text: "Marah & nuduh dia nyuekin.", points: 1 }
+                ]
+            },
+            {
+                question: "Pasanganmu ngingetin janji kecil yang beneran kamu lupa.",
+                options: [
+                    { text: "Minta maaf tulus, ngaku salah, segera tepatin.", points: 3 },
+                    { text: "Ngeles biar nggak kelihatan lupa.", points: 2 },
+                    { text: "Balik nyalahin karena nggak ngingetin dari awal.", points: 1 }
+                ]
+            },
+            {
+                question: "Di tempat umum, pasanganmu kesandung/ngelakuin hal memalukan.",
+                options: [
+                    { text: "Bantuin/ikutan ketawa kecil biar nggak malu sendiri.", points: 3 },
+                    { text: "Pura-pura nggak kenal/buang muka.", points: 2 },
+                    { text: "Marahin di tempat umum.", points: 1 }
+                ]
+            },
+            {
+                question: "Pasanganmu antusias cerita hobinya yang kamu nggak suka.",
+                options: [
+                    { text: "Tetap dengerin & nanya biar dia semangat.", points: 3 },
+                    { text: "Dengerin seadanya sambil main HP.", points: 2 },
+                    { text: "Motong & suruh ganti topik.", points: 1 }
+                ]
+            },
+            {
+                question: "Kamu capek banget habis nugas/bikin proyek mikrokontroler, pasangan ngajak jalan.",
+                options: [
+                    { text: "Jelasin baik-baik capek, tawarin ganti besok/VC.", points: 3 },
+                    { text: "Nolak singkat 'Nggak bisa, capek'.", points: 2 },
+                    { text: "Ngambek karena ngerasa dia nggak ngertiin.", points: 1 }
+                ]
+            },
+            {
+                question: "Pasangan nanya pendapat soal barang overprice yang mau dibeli pakai uangnya sendiri.",
+                options: [
+                    { text: "Kasih saran logis, tapi dukung keputusannya.", points: 3 },
+                    { text: "Bilang 'Terserah kamu aja'.", points: 2 },
+                    { text: "Ngomel & ngelarang keras.", points: 1 }
+                ]
+            },
+            {
+                question: "Teman lawan jenis sering chat nggak penting ke kamu.",
+                options: [
+                    { text: "Balas seperlunya, terbuka sama pasangan biar nggak overthinking.", points: 3 },
+                    { text: "Asyik chatan tapi di-silent.", points: 2 },
+                    { text: "Hapus riwayat chat biar aman.", points: 1 }
+                ]
+            },
+            {
+                question: "Nonton film berdua pilihan dia, tapi kamu ngantuk/bosan.",
+                options: [
+                    { text: "Jujur ngantuk, minta maaf, nyender di bahunya.", points: 3 },
+                    { text: "Main HP sendiri biar nggak ketiduran.", points: 2 },
+                    { text: "Ninggalin tidur/komplain film jelek.", points: 1 }
+                ]
+            },
+            {
+                question: "Pasangan numpahin minuman ke bajumu tanpa sengaja.",
+                options: [
+                    { text: "Bilang 'Nggak apa-apa' & bersihin bareng.", points: 3 },
+                    { text: "Ngeluh sedikit sambil bersihin sendiri.", points: 2 },
+                    { text: "Nge-gas & ngatain ceroboh.", points: 1 }
+                ]
+            },
+            {
+                question: "Pasangan ngajak makan di tempat yang kamu nggak pengen.",
+                options: [
+                    { text: "Usulin tempat lain dengan enak.", points: 3 },
+                    { text: "Pasrah ikut tapi muka ditekuk.", points: 2 },
+                    { text: "Tolak mentah-mentah.", points: 1 }
+                ]
+            },
+            {
+                question: "Teman tongkronganmu bercandain pasanganmu sampai dia nggak nyaman.",
+                options: [
+                    { text: "Back-up pasangan/negur teman dengan asyik tapi tegas.", points: 3 },
+                    { text: "Ikutan senyum aja biar nggak kaku.", points: 2 },
+                    { text: "Ikutan ngetawain pasangan.", points: 1 }
+                ]
+            },
+            {
+                question: "Pasangan ngirim meme/TikTok garing.",
+                options: [
+                    { text: "Bales stiker lucu/wkwkwk ngehargain usahanya.", points: 3 },
+                    { text: "Cuma di-read/balas 'Garing'.", points: 2 },
+                    { text: "Bilang 'Nggak lucu, ngapain ngirim'.", points: 1 }
+                ]
+            },
+            {
+                question: "Waktu marahan, dia bilang 'Aku butuh waktu sendiri dulu'.",
+                options: [
+                    { text: "Kasih space & bilang 'Oke kabarin ya'.", points: 3 },
+                    { text: "Setuju tapi nada sinis/passive-aggressive.", points: 2 },
+                    { text: "Maksa ngobrol detik itu juga.", points: 1 }
+                ]
+            },
+            {
+                question: "Pasangan sakit & nggak bisa nemenin ke acara penting kalian.",
+                options: [
+                    { text: "Gak masalahin acaranya, fokus nanyain keadaannya.", points: 3 },
+                    { text: "Kecewa bilang 'Yaaah' tapi nyuruh istirahat.", points: 2 },
+                    { text: "Ngambek karena rencana berantakan.", points: 1 }
+                ]
+            }
+        ];
+
+        // State Variables
+        let currentQuestionIndex = 0;
+        let totalScore = 0;
+
+        // DOM Elements
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const progressBar = document.getElementById('progress-bar');
+        const questionCounter = document.getElementById('question-counter');
+
+        // Functions
+        function startQuiz() {
+            startScreen.classList.add('hidden-screen');
+            quizScreen.classList.remove('hidden-screen');
+            quizScreen.classList.add('fade-in');
+            currentQuestionIndex = 0;
+            totalScore = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            // Remove animation class briefly to restart it
+            quizScreen.classList.remove('fade-in');
+            void quizScreen.offsetWidth; // Trigger reflow to restart animation
+            quizScreen.classList.add('fade-in');
+
+            const currentQuestion = questions[currentQuestionIndex];
+            
+            // Update UI
+            questionText.innerText = currentQuestion.question;
+            questionCounter.innerText = `Pertanyaan ${currentQuestionIndex + 1} / ${questions.length}`;
+            
+            // Update Progress Bar (20% per question)
+            const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+
+            // Randomize options so the highest point isn't always in the same place
+            const shuffledOptions = [...currentQuestion.options].sort(() => Math.random() - 0.5);
+
+            // Create option buttons
+            shuffledOptions.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'glass-btn w-full text-left p-4 rounded-xl text-gray-700 font-medium hover:text-pink-600';
+                btn.innerText = option.text;
+                // Stagger animation for options
+                btn.style.animation = `slideUp 0.4s ease forwards ${index * 0.1}s`;
+                btn.style.opacity = '0';
+                
+                btn.onclick = () => handleAnswer(option.points);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(points) {
+            totalScore += points;
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            quizScreen.classList.add('hidden-screen');
+            resultScreen.classList.remove('hidden-screen');
+            resultScreen.classList.add('fade-in');
+
+            document.getElementById('final-score').innerText = totalScore;
+
+            const iconEl = document.getElementById('result-icon');
+            const titleEl = document.getElementById('result-title');
+            const descEl = document.getElementById('result-desc');
+
+            // Result Logic
+            if (totalScore >= 50) {
+                iconEl.innerText = "🟢✨";
+                titleEl.innerText = "Green Flag Idaman!";
+                titleEl.className = "text-3xl font-bold mb-2 text-green-600 slide-up";
+                descEl.innerText = "Wah, kamu luar biasa! Kamu sangat menghargai pasanganmu, tahu batasan privasi, dan punya komunikasi yang sehat. Pasanganmu beruntung banget punya kamu!";
+            } else if (totalScore >= 35) {
+                iconEl.innerText = "🟡😅";
+                titleEl.innerText = "Masih Suka Keceplosan";
+                titleEl.className = "text-3xl font-bold mb-2 text-yellow-600 slide-up";
+                descEl.innerText = "Kamu lumayan sopan, tapi kadang egomu atau rasa ingin tahumu masih suka nyelip. Kurang-kurangin ya overthinkingnya, lebih banyakin komunikasi jujur!";
+            } else {
+                iconEl.innerText = "🚩🚨";
+                titleEl.innerText = "Red Flag Alert!";
+                titleEl.className = "text-3xl font-bold mb-2 text-red-500 slide-up";
+                descEl.innerText = "Waduh... Kamu harus banyak introspeksi nih. Hubungan butuh rasa saling menghargai dan privasi. Yuk mulai belajar turunin ego demi hubungan yang lebih sehat.";
+            }
+        }
+
+        function restartQuiz() {
+            resultScreen.classList.add('hidden-screen');
+            startScreen.classList.remove('hidden-screen');
+            
+            // Remove classes for fresh animation next time
+            resultScreen.classList.remove('fade-in');
+            startScreen.classList.add('fade-in');
+        }
+    </script>
+</body>
+</html>
